@@ -3,7 +3,7 @@ name: Build Android APK
 on:
   push:
     branches: [main]
-  workflow_dispatch: # 支持在 GitHub 网页手动触发
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,6 +29,19 @@ jobs:
         with:
           packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
 
+      - name: Print environment
+        run: |
+          echo "==== node ===="
+          node -v
+          echo "==== npm ===="
+          npm -v
+          echo "==== java ===="
+          java -version
+          echo "==== ANDROID_HOME ===="
+          echo "$ANDROID_HOME"
+          echo "==== sdkmanager packages ===="
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --list_installed || true
+
       - name: Install dependencies
         run: npm ci
 
@@ -41,11 +54,31 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
+      - name: Print Gradle / AGP versions
+        working-directory: android
+        run: |
+          ./gradlew --version | tee ../gradle-version.log
+
       - name: Build debug APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon --stacktrace --info
+        id: build
+        run: |
+          set -o pipefail
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee ../gradle-build.log
+
+      - name: Upload build log (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: |
+            gradle-build.log
+            gradle-version.log
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: huabei-jianwei-debug-apk
