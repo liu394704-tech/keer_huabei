@@ -9,19 +9,3 @@ dist-ssr
 .env.local
 *.log
 *.tsbuildinfo
-
-# Capacitor / Android
-android/.gradle/
-android/.idea/
-android/app/build/
-android/build/
-android/local.properties
-android/captures/
-android/.cxx/
-android/app/release/
-*.keystore
-*.jks
-.gradle/
-
-# Capacitor assets sources（保留 resources 让别人也能重新生成）
-# resources/

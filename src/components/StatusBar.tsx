@@ -5,26 +5,13 @@ interface Props {
   tone?: 'light' | 'dark'
 }
 
-/**
- * 模拟 iOS/Android 顶部状态栏。
- * - 在 Capacitor 原生壳中，系统已经渲染真实状态栏，这里自动隐藏。
- * - 在桌面 / 移动浏览器中，仍然展示作为 UI 的一部分。
- */
 export default function StatusBar({ tone = 'dark' }: Props) {
   const [time, setTime] = useState(() => currentTime())
-  const [isNative, setIsNative] = useState(false)
 
   useEffect(() => {
-    const cap = (window as unknown as {
-      Capacitor?: { isNativePlatform?: () => boolean }
-    }).Capacitor
-    setIsNative(Boolean(cap?.isNativePlatform?.()))
-
     const t = setInterval(() => setTime(currentTime()), 30_000)
     return () => clearInterval(t)
   }, [])
-
-  if (isNative) return null
 
   const color = tone === 'light' ? '#ffffff' : 'var(--fg-primary)'
 
