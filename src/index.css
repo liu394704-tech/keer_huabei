@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- 双主题 CSS 变量 ---------- */
+:root,
+[data-theme='novice'] {
+  --bg-app: #f4f7fc;
+  --bg-header: linear-gradient(180deg, #2e6bff 0%, #1f56eb 100%);
+  --bg-header-solid: #2e6bff;
+  --bg-card: #ffffff;
+  --bg-card-soft: #f6f9ff;
+  --bg-surface: #ffffff;
+  --bg-tab-active: #ffffff;
+  --bg-tab-inactive: rgba(255, 255, 255, 0.22);
+
+  --fg-primary: #0e1421;
+  --fg-secondary: #515b6b;
+  --fg-muted: #8a93a2;
+  --fg-inverse: #ffffff;
+  --fg-brand: #2e6bff;
+  --fg-on-brand: #ffffff;
+
+  --border-soft: #e7edf5;
+  --border-card: rgba(46, 107, 255, 0.12);
+
+  --brand-1: #2e6bff;
+  --brand-2: #5a8cff;
+  --brand-3: #8db2ff;
+  --brand-accent: #ffbe16;
+
+  --chip-bg: #eef3ff;
+  --chip-fg: #1f56eb;
+
+  --shadow-soft: 0 2px 12px rgba(25, 50, 100, 0.06);
+  --shadow-card: 0 8px 24px rgba(25, 50, 100, 0.08);
+
+  color-scheme: light;
+}
+
+[data-theme='expert'] {
+  --bg-app: #0b1120;
+  --bg-header: linear-gradient(180deg, #0b1120 0%, #141c33 100%);
+  --bg-header-solid: #0b1120;
+  --bg-card: #141c33;
+  --bg-card-soft: #1a2345;
+  --bg-surface: #0f1629;
+  --bg-tab-active: #ffbe16;
+  --bg-tab-inactive: rgba(255, 255, 255, 0.04);
+
+  --fg-primary: #f3f5fa;
+  --fg-secondary: #b5bdd1;
+  --fg-muted: #7a8294;
+  --fg-inverse: #0b1120;
+  --fg-brand: #ffbe16;
+  --fg-on-brand: #1a1407;
+
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --border-card: rgba(255, 190, 22, 0.22);
+
+  --brand-1: #ffbe16;
+  --brand-2: #ffce3d;
+  --brand-3: #ffe17a;
+  --brand-accent: #2e6bff;
+
+  --chip-bg: rgba(255, 190, 22, 0.1);
+  --chip-fg: #ffce3d;
+
+  --shadow-soft: 0 2px 14px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 12px 28px rgba(0, 0, 0, 0.45);
+
+  color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0b1120;
+  color: var(--fg-primary);
+  font-family: 'PingFang SC', 'HarmonyOS Sans', 'Noto Sans SC', 'Helvetica Neue', Arial,
+    system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* 隐藏滚动条，但保留功能 */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* 容器：模拟 Mate 60 Pro（6.82" FHD+） */
+/* 物理 2720×1260，CSS 逻辑视觉 420×907 左右 */
+.phone-viewport {
+  width: 420px;
+  height: 910px;
+}
+
+@media (max-width: 768px) {
+  .phone-viewport {
+    width: 100vw;
+    height: 100dvh;
+  }
+}
+
+/* 提供曲面边缘的柔光模拟 */
+.curved-edge::before,
+.curved-edge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  z-index: 40;
+}
+.curved-edge::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.18),
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+.curved-edge::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.18),
+    rgba(0, 0, 0, 0) 70%
+  );
+}
+
+/* 通用卡片 */
+.app-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 20px;
+  box-shadow: var(--shadow-card);
+}
+
+/* 通用 chip */
+.app-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  white-space: nowrap;
+}
+
+/* 安全区内边距 */
+.safe-bottom {
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+}
+
+/* 底部抽屉遮罩 */
+.sheet-backdrop {
+  background: rgba(10, 18, 36, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* 专家模式下深色卡片内的黄色文字微调 */
+[data-theme='expert'] .app-card {
+  background: linear-gradient(180deg, #151d36 0%, #111833 100%);
+}
